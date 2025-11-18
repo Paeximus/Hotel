@@ -1,0 +1,9 @@
+/* Add this to the bottom of site.css (or merge with existing body styles) */
+.site-bg {
+  background-image: url('/images/hotel.jpg');
+  background-size: cover;           /* scale to cover viewport */
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;     /* optional: make it fixed */
+  background-color: #f4f6f8;        /* fallback color */
+}

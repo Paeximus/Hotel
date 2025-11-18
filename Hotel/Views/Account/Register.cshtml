@@ -1,0 +1,105 @@
+﻿@model Hotel.Models.ViewModels.AccountViewModel
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_AdminDashLayout.cshtml";
+}
+
+
+<div class="card mx-auto shadow mt-3 py-3" style="width:30rem">
+    <div class="card-header">
+        <h1>Register</h1>
+        <h4>User</h4>
+        <hr />
+        <div class="card-body row">
+            <div class="col">
+                <form asp-action="Register" onsubmit="showSuccessAlert()">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group m-3">
+                        <label asp-for="FirstName" class="control-label"></label>
+                        <input asp-for="FirstName" class="form-control" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group m-3">
+                        <label asp-for="LastName" class="control-label"></label>
+                        <input asp-for="LastName" class="form-control" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group m-3">
+                        <label asp-for="OtherNames" class="control-label"></label>
+                        <input asp-for="OtherNames" class="form-control" />
+                        <span asp-validation-for="OtherNames" class="text-danger"></span>
+                    </div>
+                    <div class="row form-group m-3">
+                        <label asp-for="Gender" class="control-label"></label>
+                        <select asp-for="Gender" class="form-control" asp-items="ViewBag.Gender">
+                            <option value="">--Choose--</option>
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
+                        </select>  
+                        <span asp-validation-for="Gender" class="text-danger"></span>
+                    </div>
+                    <div class="row form-group m-3">
+                        <label asp-for="DateOfBirth" class="control-label"></label>
+                        <input asp-for="DateOfBirth" class="form-control" type="date"/>
+                        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                    </div>
+                    <div class="form-group m-3">
+                        <label asp-for="Email" class="control-label">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
+                                <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z" />
+                            </svg> Email
+                        </label>
+                        <input asp-for="Email" class="form-control" type="email" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group m-3">
+                        <label asp-for="Password" class="control-label">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-key" viewBox="0 0 16 16">
+                                <path d="M0 8a4 4 0 0 1 7.465-2H14a.5.5 0 0 1 .354.146l1.5 1.5a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0L13 9.207l-.646.647a.5.5 0 0 1-.708 0L11 9.207l-.646.647a.5.5 0 0 1-.708 0L9 9.207l-.646.647A.5.5 0 0 1 8 10h-.535A4 4 0 0 1 0 8m4-3a3 3 0 1 0 2.712 4.285A.5.5 0 0 1 7.163 9h.63l.853-.854a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.793-.793-1-1h-6.63a.5.5 0 0 1-.451-.285A3 3 0 0 0 4 5" />
+                                <path d="M4 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                            </svg> Password
+                        </label>
+                        <input asp-for="Password" class="form-control" type="password" autocomplete="off" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group m-3">
+                        <label asp-for="RoleId" class="control-label"></label>
+                        <select asp-for="RoleId" class ="form-control" asp-items="ViewBag.RoleId">
+                            <option value="1">Admin</option>
+                            <option value="2">Client</option>
+                        </select>
+                
+                    </div>
+                    <div class="form-group m-3">
+                        <input type="submit" onsubmit="" value="Create" class="btn btn-primary" />
+                    </div>
+            
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        function showSuccessAlert(e) {
+            e.preventDefault();
+                    Swal.fire({
+          title: "Sucess",
+          width: 600,
+          //timer: 5000,
+          padding: "3em",
+          color: "#716add",
+          background: "#fff",
+          backdrop: `
+            rgba(0,0,123,0.4)
+            url("https://www.icegif.com/wp-content/uploads/2023/02/icegif-519.gif")
+            left top
+            repeat
+          `
+        });
+        }
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,68 @@
+﻿@model Hotel.Models.ViewModels.RoomViewModel
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_ClientDashLayout.cshtml";
+}
+<div class="card mx-auto">
+    <div class="card-body">
+        <h1>Delete</h1>
+
+        <h3>Are you sure you want to delete this?</h3>
+        <div>
+            <h4>Room</h4>
+            <hr />
+            <dl class="row">
+                <dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.RoomNo)
+                </dt>
+                <dd class = "col-sm-10">
+                    @Html.DisplayFor(model => model.RoomNo)
+                </dd>
+                <dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.MaxOccupants)
+                </dt>
+                <dd class = "col-sm-10">
+                    @Html.DisplayFor(model => model.MaxOccupants)
+                </dd>
+                <dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.IsOccupied)
+                </dt>
+                <dd class = "col-sm-10">
+                    @Html.DisplayFor(model => model.IsOccupied)
+                </dd>
+                <dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.Price)
+                </dt>
+                <dd class = "col-sm-10">
+                    @Html.DisplayFor(model => model.Price)
+                </dd>
+                <dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.RoomImage)
+                </dt>
+                <dd class = "col-sm-10">
+                    @if (Model.RoomImage == null)
+                    {
+                        <b style="font-family:Garamond">No prieview available</b>
+                    }
+                    else
+                    {
+                        <img src="data:image/jpg;base64,@Convert.ToBase64String(Model.RoomImage)" alt="Room Image" style="width: 200px; height: 150px;" />
+                    }
+                </dd>
+                <dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.Floor)
+                </dt>
+                <dd class = "col-sm-10">
+                    @Html.DisplayFor(model => model.Floor.FloorId)
+                </dd>
+            </dl>
+    
+            <form asp-action="Delete">
+                <input type="hidden" asp-for="RoomId" />
+                <input type="submit" value="Delete" class="btn btn-danger" /> |
+                <a asp-action="Index">Back to List</a>
+            </form>
+        </div>
+    </div>
+</div>
