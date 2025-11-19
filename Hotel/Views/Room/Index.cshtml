@@ -31,7 +31,12 @@
                     <a asp-action="Edit" asp-route-id="@item.RoomId">Edit</a> 
                 <a asp-action="Details" asp-route-id="@item.RoomId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.RoomId">Delete</a>
-                <a asp-controller="Reservation" asp-action="Add" asp-route-id="@item.RoomId">Make Reservation</a>
+                <a asp-controller="Reservation" asp-action="Add" asp-route-id="@item.RoomId" onclick="save(@item.RoomId)">Make Reservation</a>
+                <script>
+                    function save(roomId){
+                        localStorage.setItem('object', roomId);
+                    }
+                </script>
             </div>
     </div>
 }

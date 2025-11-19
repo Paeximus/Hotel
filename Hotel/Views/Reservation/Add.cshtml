@@ -1,4 +1,4 @@
-﻿@model Hotel.Models.ViewModels.MultiViewModel
+﻿@model Hotel.Models.ViewModels.ReservationViewModel
 
 @{
     ViewData["Title"] = "Add";
@@ -14,9 +14,14 @@
         <form asp-action="Add">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="@Model.ReservationViewModel.ArrivalDate" class="control-label">Check In Date</label>
-                <input for="ArrivalDate" id="ArrivalDate" type="date" class="form-control" />
-                <span asp-validation-for="@Model.ReservationViewModel.ArrivalDate" class="text-danger"></span>
+                <label asp-for="@Model.ArrivalDate" class="control-label">Check In Date</label>
+                <input asp-for="ArrivalDate" id="ArrivalDate" type="date" class="form-control" />
+                <span asp-validation-for="@Model.ArrivalDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.DateOfExit" class="control-label">Check Out Date</label>
+                <input asp-for="DateOfExit" id="DateOfExit" type="date" class="form-control" />
+                <span asp-validation-for="@Model.DateOfExit" class="text-danger"></span>
                 <script>
                     const today = new Date();
                     const year = today.getFullYear();
@@ -24,38 +29,44 @@
                     const day = String(today.getDate()).padStart(2, '0');
                     const formattedDate = `${year}-${month}-${day}`;
                     document.getElementById('ArrivalDate').setAttribute('min', formattedDate);
-                </script>
-            </div>
-            <div class="form-group">
-                <label asp-for="@Model.ReservationViewModel.DateOfExit" class="control-label">Check Out Date</label>
-                <input for="DateOfExit" id="DateOfExit" type="date" class="form-control" />
-                <span asp-validation-for="@Model.ReservationViewModel.DateOfExit" class="text-danger"></span>
-                <script>
                     document.getElementById('DateOfExit').setAttribute('min', formattedDate);
                 </script>
             </div>
             <div class="form-group">
-                <select asp-for="@Model.ReservationViewModel.ModeOfOrder" class="form-control" hidden>
-                    <option selected>Online</option>
+                <select asp-for="@Model.ModeOfOrder" class="form-control" hidden>
+                    <option selected value="Online">Online</option>
                 </select>
-                <span asp-validation-for="@Model.ReservationViewModel.ModeOfOrder" class="text-danger"></span>
+                <span asp-validation-for="@Model.ModeOfOrder" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="@Model.ReservationViewModel.WithCar" class="control-label"></label>
-                <select asp-for="@Model.ReservationViewModel.WithCar" class="form-control">
+                <label asp-for="@Model.WithCar" class="control-label"></label>
+                <select asp-for="@Model.WithCar" class="form-control">
                     <option selected value="">--Please select--</option>
                     <option value="Y">Yes</option>
                     <option value="N">No</option>
                 </select>
-                <span asp-validation-for="@Model.ReservationViewModel.WithCar" class="text-danger"></span>
+                <span asp-validation-for="@Model.WithCar" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="@Model.ReservationViewModel.CarRegNo" class="control-label"></label>
-                <input asp-for="@Model.ReservationViewModel.CarRegNo" class="form-control" />
-                <span asp-validation-for="@Model.ReservationViewModel.CarRegNo" class="text-danger"></span>
+                <input asp-for="@Model.RoomId" id="RoomId" class="form-control" hidden/>
+                <span asp-validation-for="@Model.RoomId" class="text-danger"></span>
+            </div>
+            <script>
+                var object = localStorage.getItem('object');
+                  function submitForm() {
+                  document.querySelector("#RoomId").value = object;
+                  localStorage.removeItem('object');
+                }
+                
+
+            </script>
+            <div class="form-group">
+                <label asp-for="@Model.CarRegNo" class="control-label"></label>
+                <input asp-for="@Model.CarRegNo" class="form-control" />
+                <span asp-validation-for="@Model.CarRegNo" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" onclick="submitForm()" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>

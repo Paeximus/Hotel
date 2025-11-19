@@ -22,11 +22,11 @@ namespace Hotel.Controllers
         public IActionResult Add(int? roomId)
         {
 
-            MultiViewModel model = new MultiViewModel();
+            ReservationViewModel model = new ReservationViewModel();
             if (roomId.HasValue)
             {
                 // Pre-fill the model with roomId so view will render hidden input
-                model.RoomViewModel.RoomId = roomId.Value;
+                model.RoomId = roomId.Value;
                 ViewBag.SelectedRoomId = roomId.Value;
             }
             else
@@ -42,10 +42,11 @@ namespace Hotel.Controllers
         // POST: Reservation/Add
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Add(MultiViewModel model, int? roomId)
+        public IActionResult Add(ReservationViewModel model, int? roomId)
         {
             if (!ModelState.IsValid)
             {
+                Console.WriteLine("Model state is invalid");
                 // Preserve SelectedRoomId so view can re-render correctly
                 ViewBag.SelectedRoomId = roomId ?? (object?)null;
                 return View(model);
@@ -54,8 +55,8 @@ namespace Hotel.Controllers
             // Ensure RoomId is taken from the route/query or from server-side logic — do not trust client input alone.
             if (roomId.HasValue)
             {
-                model.ReservationViewModel.RoomId = roomId.Value;
-                Console.WriteLine($"Using roomId: {model.ReservationViewModel.RoomId}");
+                model.RoomId = roomId.Value;
+                Console.WriteLine($"Using roomId: {model.RoomId}");
             }
             else
                 Console.WriteLine("No roomId provided in query or route; using model.RoomId from form data.");
@@ -95,7 +96,7 @@ namespace Hotel.Controllers
                 modeOfOrder = "Online";
             }
 
-            model.ReservationViewModel.ModeOfOrder = modeOfOrder;
+            model.ModeOfOrder = modeOfOrder;
             var roomId1 = roomId.ToString();
             var created = _reservationService.AddReservation(model, userId, roomId1);
             if (!created)
