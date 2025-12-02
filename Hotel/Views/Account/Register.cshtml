@@ -1,15 +1,13 @@
 ﻿@model Hotel.Models.ViewModels.AccountViewModel
 @{
     ViewData["Title"] = "Register";
-    Layout = "~/Views/Shared/_AdminDashLayout.cshtml";
+    Layout = "~/Views/Shared/Register.cshtml";
 }
 
 
-<div class="card mx-auto shadow mt-3 py-3" style="width:30rem">
+<div class="card mx-auto shadow mt-3 py-3 m-2" style="width:30rem">
     <div class="card-header">
-        <h1>Register</h1>
-        <h4>User</h4>
-        <hr />
+        <h1 style="text-align:center; font-family:Gabriola; font-size:70px">Register</h1>
         <div class="card-body row">
             <div class="col">
                 <form asp-action="Register" onsubmit="showSuccessAlert()">
@@ -76,6 +74,7 @@
             
                 </form>
             </div>
+            <a asp-controller="Account" asp-action="Login" style="text-align:center"><small style="font-size:12px">Already have an account? Login...</small></a>
         </div>
     </div>
 </div>

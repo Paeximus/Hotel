@@ -15,27 +15,40 @@ namespace Hotel.Services
             _logger = logger;
             _context = context;
         }
-        public  List<RoomViewModel> GetRooms()
+        public List<RoomViewModel> GetUnreservedRooms()
         {
+            List<Reservation> reservation = _context.Reservations.Include(x => x.Room).Distinct().ToList();
+            List<int> model1 = reservation.Select(r => r.RoomId).ToList();
+            List<RoomViewModel> unreservedrooms = GetRooms(model1);
+
+            return unreservedrooms;
+        }
+
+       
+
+        public  List<RoomViewModel> GetRooms(List<int> mod)
+        {
+            
             List<Room> rooms = _context.Rooms.Include(x => x.Floor)
                                                      .Include(x => x.Privileges)
+                                                     .Where(x=>!mod.Contains(x.RoomId))
                                                      .ToList();
+  
             List<RoomViewModel> model = rooms.Select(p => new RoomViewModel
             {
                 RoomId = p.RoomId,
                 RoomNo = p.RoomNo,
                 MaxOccupants = p.MaxOccupants,
-                IsOccupied = p.IsOccupied,
                 RoomImage = p.RoomImage,
                 Price = p.Price,
-                FloorId = p.FloorId,
+                FloorId = p.FloorId
             }).ToList();
             return model;
         }
 
-        public RoomViewModel GetRoom(int productId)
+        public RoomViewModel GetRoom(int roomId)
         {
-            Room room = _context.Rooms.Where(p => p.RoomId == productId).Include(p => p.Floor)
+            Room room = _context.Rooms.Where(p => p.RoomId == roomId).Include(p => p.Floor)
                                                                                     .Include(p => p.Privileges)
                                                                                     .FirstOrDefault();
             if (room == null) return new RoomViewModel();
@@ -130,23 +143,6 @@ namespace Hotel.Services
 
                 return true;
             }
-            //if (room == null) return false;
-            //if (model.RoomImageFile != null)
-            //{
-            //    using (var memoryStream = new MemoryStream())
-            //    {
-            //        model.RoomImageFile.CopyTo(memoryStream);
-            //        model.RoomImage = memoryStream.ToArray();
-            //    }
-
-            //    Room? existingImage = _context.Rooms.Where(x => x.RoomImage == room.RoomImage).FirstOrDefault();
-            //    if (existingImage != null)
-            //    {
-            //        existingImage.RoomImage = model.RoomImage;
-            //        _context.Rooms.Update(existingImage);
-            //        _context.SaveChanges();
-            //    }
-            //}
             catch (Exception)
             {
                 return false;
@@ -154,13 +150,13 @@ namespace Hotel.Services
 
         }
 
-        public bool DeleteRoom(int productId)
+        public bool DeleteRoom(int roomId)
         {
             try
             {
-                Room? product = _context.Rooms.Where(x => x.RoomId == productId).FirstOrDefault();
-                if (product == null) return false;
-                _context.Rooms.Remove(product);
+                Room? room = _context.Rooms.Where(x => x.RoomId == roomId).FirstOrDefault();
+                if (room == null) return false;
+                _context.Rooms.Remove(room);
                 _context.SaveChanges();
                 return true;
             }

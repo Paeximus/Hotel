@@ -28,7 +28,7 @@ namespace Hotel.Controllers
         // GET: RoomController
         public ActionResult Index()
         {
-            var rooms = _roomService.GetRooms();
+            var rooms = _roomService.GetUnreservedRooms();
             _logger.LogInformation("Accessed RoomController Index action.");
 
             return View(rooms);

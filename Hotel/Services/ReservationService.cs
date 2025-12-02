@@ -1,8 +1,12 @@
 ﻿using Hotel.Models.Data.HotelContext;
 using Hotel.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 
 namespace Hotel.Services
 {
+    [Authorize]
     public class ReservationService
     {
         private readonly HotelContext _context;
@@ -14,16 +18,89 @@ namespace Hotel.Services
             _logger = logger;
         }
 
-        public IEnumerable<Reservation> GetAllResevations()
+        public IEnumerable<ReservationViewModel> SeeReservation(int userid)
         {
-            return _context.Reservations.ToList();
+            IEnumerable<Reservation> reservation = _context.Reservations.Where(r => r.UserId == userid).Include(x=>x.Room).Include(x=>x.User).ToList();
+
+            
+            IEnumerable<ReservationViewModel> model = reservation.Select(p => new ReservationViewModel
+            {
+                ReservationId = p.ReservationId,
+                RoomId = p.RoomId,
+                ReservationDate = p.ReservationDate,
+                ArrivalDate = p.ArrivalDate,
+                DateOfExit = p.DateOfExit,
+                WithCar = p.WithCar,
+                ModeOfOrder = p.ModeOfOrder,
+                CarRegNo = p.CarRegNo,
+                UserId = p.UserId,
+                Room = p.Room,
+                User = p.User,
+            }).ToList();
+
+            return model;
+
         }
+
+        public ReservationViewModel GetReservation(int Reservationid)
+        {
+            Reservation reservation = _context.Reservations.Where(r => r.ReservationId == Reservationid)
+                .Include(r => r.Room)
+                .Include(r => r.User)
+                .FirstOrDefault();
+
+
+            if (reservation == null) return null;
+            ReservationViewModel model = new ReservationViewModel
+            {
+                ReservationId = reservation.ReservationId,
+                RoomId = reservation.RoomId,
+                ReservationDate = reservation.ReservationDate,
+                ArrivalDate = reservation.ArrivalDate,
+                DateOfExit = reservation.DateOfExit,
+                WithCar = reservation.WithCar,
+                ModeOfOrder = reservation.ModeOfOrder,
+                CarRegNo = reservation.CarRegNo,
+                UserId = reservation.UserId,
+                Room = reservation.Room,
+                User = reservation.User,
+            };
+
+            return model;
+
+        }
+        public IEnumerable<ReservationViewModel> GetAllResevations()
+        {
+
+            IEnumerable<Reservation> reservation = _context.Reservations.Include(x => x.Room)
+                                                     .Include(x => x.User)
+                                                     .ToList();
+            IEnumerable<ReservationViewModel> model = reservation.Select(p => new ReservationViewModel
+            {
+                ReservationId = p.ReservationId,
+                RoomId = p.RoomId,
+                ReservationDate = p.ReservationDate,
+                ArrivalDate = p.ArrivalDate,
+                DateOfExit = p.DateOfExit,
+                WithCar = p.WithCar,
+                ModeOfOrder = p.ModeOfOrder,
+                CarRegNo = p.CarRegNo,
+                UserId = p.UserId,
+                Room = p.Room,
+                User = p.User,
+
+            }).ToList();
+            
+            return model;
+        }
+
         public bool AddReservation(ReservationViewModel model, string userId, string roomId)
         {
             if (userId != null)
                 Console.WriteLine("UserId exists");
             else
                 Console.WriteLine("UserId is null");
+            _logger.LogWarning("UserId is null");
             try
             {
                 Reservation reservation = new Reservation
@@ -33,8 +110,9 @@ namespace Hotel.Services
                     ArrivalDate = model.ArrivalDate,
                     DateOfExit = model.DateOfExit,
                     ModeOfOrder = model.ModeOfOrder,
-                    WithCar = model.WithCar,  
+                    WithCar = model.WithCar,
                     CarRegNo = model.CarRegNo,
+                   
                     //RoomId = model.RoomId
                 };
 
@@ -87,6 +165,51 @@ namespace Hotel.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error adding resevation");
+                return false;
+            }
+        }
+
+        public bool EditReservation(ReservationViewModel model)
+        {
+            try
+            {
+                Reservation? reservation = _context.Reservations.Where(x => x.ReservationId == model.ReservationId).FirstOrDefault();
+
+                reservation.RoomId = model.RoomId;
+                reservation.ReservationDate = model.ReservationDate;
+                reservation.ArrivalDate = model.ArrivalDate;
+                reservation.DateOfExit = model.DateOfExit;
+                reservation.WithCar = model.WithCar;
+                reservation.ModeOfOrder = model.ModeOfOrder;
+                reservation.CarRegNo = model.CarRegNo;
+                reservation.UserId = model.UserId;
+                reservation.Room = model.Room;
+                reservation.User = model.User;
+                _context.Reservations.Update(reservation);
+                _context.SaveChanges();
+                _logger.LogInformation("Added new room with ID {RoomId}", reservation.RoomId);
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+        }
+
+        public bool DeleteReservation(int reservationId)
+        {
+            try
+            {
+                Reservation? reservation = _context.Reservations.Where(r => r.ReservationId == reservationId).FirstOrDefault();
+                if (reservation == null) return false;
+                _context.Reservations.Remove(reservation);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
                 return false;
             }
         }

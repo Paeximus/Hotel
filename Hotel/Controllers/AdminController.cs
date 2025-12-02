@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-using HireSphere.Filters;
+using Hotel.Filters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Hotel.Controllers

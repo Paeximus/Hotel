@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Hotel.Models.ViewModels
 {
@@ -13,6 +14,8 @@ namespace Hotel.Models.ViewModels
 
         public int MaxOccupants { get; set; }
 
+        [ValidateNever]
+        [AllowNull]
         public string IsOccupied { get; set; } = null!;
 
         public decimal Price { get; set; }

@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Hotel.Models.ViewModels.RoomViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1 style="color:white; font-size:90px; font-family:Gabriola">Rooms</h1>
+
+
+
+@if(Model!=null && Model.Any()){
+
+@foreach (var item in Model) {
+    <div class="card w-25">
+        <div class="card-body">
+            <div style="text-align:center">
+             @if(item.RoomImage == null)
+                                {
+                                    <b style="font-family:Garamond">No prieview available</b>
+                                }
+                                else
+                                {
+                                    <img src="data:image/jpg;base64,@Convert.ToBase64String(item.RoomImage)" alt="Room Image" style="width: 200px; height: 150px;" />
+                                }<br />
+             </div>
+            <b>Room: </b> @Html.DisplayFor(modelItem => item.RoomNo)<br />
+            <b>Max. Number of Occupants: </b> @Html.DisplayFor(modelItem => item.MaxOccupants)<br />
+            <b>IsOccupied</b> @Html.DisplayFor(modelItem => item.IsOccupied)<br />
+            <b>Price: GH&#8373;</b> @Html.DisplayFor(modelItem => item.Price)<br />
+            <b>Floor: </b>@Html.DisplayFor(modelItem => item.FloorId)<br />
+            <a asp-action="Edit" asp-route-id="@item.RoomId">Edit</a> |
+            <a asp-action="Details" asp-route-id="@item.RoomId">Details</a> |
+            <a asp-action="Delete" asp-route-id="@item.RoomId">Delete</a> |
+            <a asp-controller="Reservation" asp-action="Add" asp-route-id="@item.RoomId" onclick="save(@item.RoomId)">Make Reservation</a>
+                <script>
+                    function save(roomId){
+                        localStorage.setItem('object', roomId);
+                    }
+                </script>
+            </div>
+    </div>
+    }
+}
+else
+{
+    <h1 class="text-light">No available rooms</h1>
+}

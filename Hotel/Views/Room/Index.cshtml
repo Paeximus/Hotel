@@ -4,17 +4,16 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1 style="color:white; font-size:90px; font-family:Gabriola">Rooms</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+
+@if(Model!=null && Model.Any()){
 
 @foreach (var item in Model) {
     <div class="card w-25">
         <div class="card-body">
             <div style="text-align:center">
-             @if(item.RoomImage == null)
+            @if(item.RoomImage == null)
                                 {
                                     <b style="font-family:Garamond">No prieview available</b>
                                 }
@@ -28,10 +27,10 @@
             <b>IsOccupied</b> @Html.DisplayFor(modelItem => item.IsOccupied)<br />
             <b>Price: GH&#8373;</b> @Html.DisplayFor(modelItem => item.Price)<br />
             <b>Floor: </b>@Html.DisplayFor(modelItem => item.FloorId)<br />
-                    <a asp-action="Edit" asp-route-id="@item.RoomId">Edit</a> 
-                <a asp-action="Details" asp-route-id="@item.RoomId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.RoomId">Delete</a>
-                <a asp-controller="Reservation" asp-action="Add" asp-route-id="@item.RoomId" onclick="save(@item.RoomId)">Make Reservation</a>
+            <a asp-action="Edit" asp-route-id="@item.RoomId">Edit</a> |
+            <a asp-action="Details" asp-route-id="@item.RoomId">Details</a> |
+            <a asp-action="Delete" asp-route-id="@item.RoomId">Delete</a> |
+            <a asp-controller="Reservation" asp-action="Add" asp-route-id="@item.RoomId" onclick="save(@item.RoomId)">Make Reservation</a>
                 <script>
                     function save(roomId){
                         localStorage.setItem('object', roomId);
@@ -39,4 +38,9 @@
                 </script>
             </div>
     </div>
+    }
+}
+else
+{
+    <h1 class="text-light">No available rooms</h1>
 }

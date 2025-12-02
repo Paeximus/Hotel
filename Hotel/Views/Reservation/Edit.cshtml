@@ -1,0 +1,91 @@
+﻿@model Hotel.Models.ViewModels.ReservationViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Reservation</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" method="post" onsubmit="submitForm()">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ReservationId" value=@Model.ReservationId" readonly />
+            <div class="form-group">
+                <input asp-for="ReservationDate" class="form-control" hidden/>
+                <span asp-validation-for="ReservationDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ArrivalDate" class="control-label"></label>
+                <input asp-for="ArrivalDate" id="ArrivalDate" class="form-control" type="date"/>
+                <span asp-validation-for="@Model.ArrivalDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateOfExit" class="control-label"></label>
+                <input asp-for="DateOfExit" id="DateOfExit" class="form-control" type="date"/>
+                <span asp-validation-for="@Model.DateOfExit" class="text-danger"></span>
+            </div>
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const today = new Date();
+                    const year = today.getFullYear();
+                    const month = String(today.getMonth() + 1).padStart(2, '0');
+                    const day = String(today.getDate()).padStart(2, '0');
+                    const formattedDate = `${year}-${month}-${day}`;
+
+                    document.getElementById('ArrivalDate').setAttribute('min', formattedDate);
+                    document.getElementById('DateOfExit').setAttribute('min', formattedDate);
+                });
+
+                
+            </script>
+            <div class="form-group">
+                <input asp-for="ModeOfOrder" class="form-control" hidden/>
+                <span asp-validation-for="ModeOfOrder" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WithCar" class="control-label"></label>
+                <select asp-for="WithCar" class="form-control" >
+                    <option value="">--Please Select--</option>
+                    <option value="Y">Yes</option>
+                    <option value="N">No</option>
+                </select>
+                <span asp-validation-for="WithCar" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CarRegNo" class="control-label"></label>
+                <input asp-for="CarRegNo" class="form-control" />
+                <span asp-validation-for="CarRegNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+\                <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId" hidden></select>
+                <span asp-validation-for="UserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="RoomId" id="RoomId" class="form-control" hidden/>
+                <span asp-validation-for="RoomId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+            <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                    var roomId = localStorage.getItem('roomid');
+                    if (roomId) {
+                        document.getElementById("RoomId").value = roomId;
+                    }
+                });
+            </script>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

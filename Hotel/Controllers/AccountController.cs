@@ -17,6 +17,7 @@ namespace Hotel.Controllers
         private readonly HotelContext _context;
         private readonly AccountServices _accountService;
         private readonly ILogger<AccountController> _logger;
+        public int userID;
         public AccountController(HotelContext context, AccountServices accountService, ILogger<AccountController> logger)
         {
             _context = context;
@@ -78,6 +79,7 @@ namespace Hotel.Controllers
                 }
 
                 bool result = _accountService.AddUser(model);
+                userID = model.UserId;
                 if (!result)
                 {
                     _logger.LogError("Registration failed - Service error");
@@ -162,8 +164,9 @@ namespace Hotel.Controllers
             }
             else if(user.RoleId == "2")
             {
-                return RedirectToAction("Dashboard", "Client");
+                return RedirectToAction("Index", "Reservation");
             }
+            userID = model.UserId;
 
             return View(model);
 

@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/Login.cshtml";
 }
 
 
@@ -39,6 +40,7 @@
                         </div>
                     </form>
                 </div>
+                <a asp-controller="Account" asp-action="Register" style="text-align:center"><small style="font-size:12px">Don't have an account? Register...</small></a>
             </div>
         </div>
     </div>

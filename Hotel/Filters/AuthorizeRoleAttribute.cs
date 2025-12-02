@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace HireSphere.Filters
+namespace Hotel.Filters
 {
     /// <summary>
     /// Custom authorization attribute to protect routes based on user role
