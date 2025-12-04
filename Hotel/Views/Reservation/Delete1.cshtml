@@ -1,0 +1,114 @@
+﻿@model Hotel.Models.ViewModels.ReservationViewModel
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@if (Model == null)
+{
+    <div class="alert alert-danger">
+        <h3>Reservation not found</h3>
+        <p>The reservation you're trying to delete does not exist.</p>
+        <a asp-action="Index" class="btn btn-primary">Back to List</a>
+    </div>
+}
+else
+{
+    <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h3 class="page-title mt-5">Delete Reservation</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <strong>Are you sure you want to delete this reservation?</strong>
+                            <p class="mb-0">This action cannot be undone.</p>
+                        </div>
+
+                        <h4>Reservation Details</h4>
+                        <hr />
+                        <dl class="row">
+                            <dt class="col-sm-3">Guest Name</dt>
+                            <dd class="col-sm-9">
+                                @if (Model.User != null)
+                                {
+                                    @Model.User.FirstName @Model.User.LastName @Model.User.OtherNames
+                                }
+                                else
+                                {
+                                    <text>N/A</text>
+                                }
+                            </dd>
+
+                            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.ReservationDate)</dt>
+                            <dd class="col-sm-9">@Model.ReservationDate.ToString("MMM dd, yyyy")</dd>
+
+                            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.ArrivalDate)</dt>
+                            <dd class="col-sm-9">@Model.ArrivalDate.ToString("MMM dd, yyyy")</dd>
+
+                            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.DateOfExit)</dt>
+                            <dd class="col-sm-9">@Model.DateOfExit.ToString("MMM dd, yyyy")</dd>
+
+                            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.ModeOfOrder)</dt>
+                            <dd class="col-sm-9">@Html.DisplayFor(model => model.ModeOfOrder)</dd>
+
+                            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.WithCar)</dt>
+                            <dd class="col-sm-9">@Html.DisplayFor(model => model.WithCar)</dd>
+
+                            @if (!string.IsNullOrEmpty(Model.CarRegNo))
+                            {
+                                <dt class="col-sm-3">@Html.DisplayNameFor(model => model.CarRegNo)</dt>
+                                <dd class="col-sm-9">@Model.CarRegNo</dd>
+                            }
+
+                            <dt class="col-sm-3">Room Number</dt>
+                            <dd class="col-sm-9">
+                                @if (Model.Room != null)
+                                {
+                                    <text>Room @Model.Room.RoomNo</text>
+                                }
+                                else
+                                {
+                                    <text>N/A</text>
+                                }
+                            </dd>
+
+                            @if (Model.Room != null && Model.Room.RoomImage != null && Model.Room.RoomImage.Length > 0)
+                            {
+                                <dt class="col-sm-3">Room Image</dt>
+                                <dd class="col-sm-9">
+                                    <img src="data:image/png;base64,@Convert.ToBase64String(Model.Room.RoomImage)"
+                                         alt="Room Image"
+                                         style="max-width: 200px; height: auto; border-radius: 5px;" />
+                                </dd>
+                            }
+                        </dl>
+
+                        <form asp-action="Delete" asp-route-id="@Model.ReservationId" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" asp-for="ReservationId" />
+
+                            <div class="form-group mt-4">
+                                <button type="submit" class="btn btn-danger"
+                                        onclick="return confirm('Are you sure you want to delete this reservation? This action cannot be undone.');">
+                                    <i class="fas fa-trash"></i> Delete Reservation
+                                </button>
+                                <a asp-action="Index1" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left"></i> Back to List
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

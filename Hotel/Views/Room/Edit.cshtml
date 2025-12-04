@@ -1,71 +1,78 @@
 ﻿@model Hotel.Models.ViewModels.RoomViewModel
-
 @{
-    ViewData["Title"] = "Edit";
+	Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Edit</h1>
+			<div class="content container-fluid">
+				<div class="page-header">
+					<div class="row align-items-center">
+						<div class="col">
+							<h3 class="page-title mt-5">Edit Room</h3>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4">
+						<form asp-action="Edit" enctype="multipart/form-data">
+							<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+							<input type="hidden" asp-for="RoomId" />
+							<div class="row">
+							<div class="form-group col">
+								<label asp-for="RoomNo" class="control-label"></label>
+								<input asp-for="RoomNo" class="form-control" />
+								<span asp-validation-for="RoomNo" class="text-danger"></span>
+							</div>
+							<div class="form-group col">
+								<label asp-for="MaxOccupants" class="control-label"></label>
+								<input asp-for="MaxOccupants" class="form-control" />
+								<span asp-validation-for="MaxOccupants" class="text-danger"></span>
+							</div>
+							<div class="form-group col">
+								<label asp-for="IsOccupied" class="control-label"></label>
+								<select asp-for="IsOccupied" class="form-control" >
+									<option value="Y">Yes</option>
+									<option value="N">No</option>
+								</select>
+								<span asp-validation-for="IsOccupied" class="text-danger"></span>
+							</div>
+							</div>
+							<div class="form-group">
+								<label asp-for="Price" class="control-label"></label>
+								<input asp-for="Price" class="form-control" />
+								<span asp-validation-for="Price" class="text-danger"></span>
+							</div>
+							<div class="form-group">
+								<label asp-for="FloorId" class="control-label"></label>
+								<select asp-for="FloorId" class="form-control" asp-items="ViewBag.Floors"></select>
+								<span asp-validation-for="FloorId" class="text-danger"></span>
+							</div>
+							<div class="form-group">
+								<label asp-for="RoomImageFile" class="control-label"></label>
+								<input type="hidden" asp-for="RoomImage" name="ExistingImageUrl" value="@Model.RoomImage" />
+								<input asp-for="RoomImageFile" class="form-control" type="file" />
+								<span asp-validation-for="RoomImageFile" class="text-danger"></span>
+							</div>
 
-<h4>Room</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="RoomId" />
-            <div class="form-group">
-                <label asp-for="RoomNo" class="control-label"></label>
-                <input asp-for="RoomNo" class="form-control" />
-                <span asp-validation-for="RoomNo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MaxOccupants" class="control-label"></label>
-                <input asp-for="MaxOccupants" class="form-control" />
-                <span asp-validation-for="MaxOccupants" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IsOccupied" class="control-label"></label>
-                <input asp-for="IsOccupied" class="form-control" />
-                <span asp-validation-for="IsOccupied" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FloorId" class="control-label"></label>
-                <select asp-for="FloorId" class="form-control" asp-items="ViewBag.Floors"></select>
-                <span asp-validation-for="FloorId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RoomImageFile" class="control-label"></label>
-                <input asp-for="RoomImageFile" class="form-control" type="file" />
-                <span asp-validation-for="RoomImageFile" class="text-danger"></span>
-            </div>
 
-            @* show existing image if present *@
-            @if (Model.RoomImage?.Length > 0)
-            {
-                <div class="form-group">
-                    <label>Current image</label>
-                    <div>
-                        <img src="data:image/png;base64,@Convert.ToBase64String(Model.RoomImage)" style="max-width:100%; height:auto;" />
-                    </div>
-                </div>
-            }
+							@* show existing image if present *@
+							@if (Model.RoomImage?.Length > 0)
+							{
+								<div class="form-group">
+									<label>Current image</label>
+									<div>
+										<img src="data:image/png;base64,@Convert.ToBase64String(Model.RoomImage)" style="max-width:100%; height:auto;" />
+									</div>
+								</div>
+							}
 
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+							<div class="form-group">
+								<input type="submit" value="Save" class="btn btn-primary" />
+							</div>
+						</form>
+					</div>
+				</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+				@* <button type="button" class="btn btn-primary buttonedit ml-2">Save</button>
+				<button type="button" class="btn btn-primary buttonedit">Cancel</button> *@
+			</div>
+		

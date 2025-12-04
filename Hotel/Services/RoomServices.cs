@@ -41,7 +41,29 @@ namespace Hotel.Services
                 MaxOccupants = p.MaxOccupants,
                 RoomImage = p.RoomImage,
                 Price = p.Price,
-                FloorId = p.FloorId
+                FloorId = p.FloorId,
+                Floor = p.Floor
+            }).ToList();
+            return model;
+        }
+
+        public List<RoomViewModel> GetRooms()
+        {
+
+            List<Room> rooms = _context.Rooms.Include(x => x.Floor)
+                                                     .Include(x => x.Privileges)
+                                                     .ToList();
+            List<Reservation> resevations = _context.Reservations.Include(r => r.Room).ToList();
+            List<RoomViewModel> model = rooms.Select(p => new RoomViewModel
+            {
+                RoomId = p.RoomId,
+                RoomNo = p.RoomNo,
+                MaxOccupants = p.MaxOccupants,
+                RoomImage = p.RoomImage,
+                Price = p.Price,
+                IsOccupied= p.IsOccupied,
+                FloorId = p.FloorId,
+                Floor = p.Floor
             }).ToList();
             return model;
         }
@@ -61,7 +83,7 @@ namespace Hotel.Services
                 RoomImage = room.RoomImage,
                 Price = room.Price,
                 FloorId = room.FloorId,
-                
+                Floor=room.Floor,
             };
             return model;
         }
@@ -88,6 +110,7 @@ namespace Hotel.Services
             }
         }
 
+       
         public bool AddRoom(RoomViewModel model) 
         {
             try
@@ -100,7 +123,7 @@ namespace Hotel.Services
                 }
                 room.RoomNo = model.RoomNo;
                 room.MaxOccupants = model.MaxOccupants;
-                room.IsOccupied = model.IsOccupied;
+                room.IsOccupied = "N";
                 room.Price = model.Price;
                 room.FloorId = model.FloorId;
                 room.RoomImage = model.RoomImage;
@@ -123,19 +146,21 @@ namespace Hotel.Services
             try
             {
                 Room? room = _context.Rooms.Where(x => x.RoomId == model.RoomId).FirstOrDefault();
-                
 
-               
-                using (var memoryStream = new MemoryStream())
+
+                if (model.RoomImageFile != null && model.RoomImageFile.Length > 0)
                 {
-                    model.RoomImageFile?.CopyTo(memoryStream);
-                    model.RoomImage = memoryStream.ToArray();
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        model.RoomImageFile?.CopyTo(memoryStream);
+                        model.RoomImage = memoryStream.ToArray();
+                    }
+                    room.RoomImage = model.RoomImage;
                 }
                 room.RoomNo = model.RoomNo;
                 room.Price = model.Price;
                 room.MaxOccupants = model.MaxOccupants;
                 room.IsOccupied = model.IsOccupied;
-                room.RoomImage = model.RoomImage;
                 room.FloorId = model.FloorId;
                 _context.Rooms.Update(room);
                 _context.SaveChanges();

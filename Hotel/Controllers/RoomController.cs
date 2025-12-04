@@ -34,10 +34,19 @@ namespace Hotel.Controllers
             return View(rooms);
         }
 
-        // GET: RoomController/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Index1()
         {
-            return View();
+            var rooms = _roomService.GetRooms();
+            _logger.LogInformation("Accessed RoomController Index action.");
+
+            return View(rooms);
+        }
+
+        // GET: RoomController/Details/5
+        public ActionResult Details1(int id)
+        {
+            var model = _roomService.GetRoom(id);
+            return View(model);
         }
 
         // GET: RoomController/Create
@@ -78,7 +87,7 @@ namespace Hotel.Controllers
             try
             {
                 _roomService.AddRoom(model);
-                return RedirectToAction("Index", "Room");
+                return RedirectToAction("Index1", "Room");
             }
             catch (Exception ex)
             {
@@ -113,7 +122,7 @@ namespace Hotel.Controllers
                 IsOccupied = room.IsOccupied,
                 Price = room.Price,
                 FloorId = room.FloorId,
-                RoomImage = room.RoomImage ?? Array.Empty<byte>()
+                RoomImage = room.RoomImage ?? Array.Empty<byte>(),
             };
 
             var floors = _context.Floors.OrderBy(f => f.FloorNo).ToList();
@@ -132,7 +141,7 @@ namespace Hotel.Controllers
                 if (ModelState.IsValid)
                 {
                     // If a new file was uploaded, read it into the model; otherwise preserve existing bytes
-                    if (model.RoomImageFile != null && model.RoomImageFile.Length > 0)
+                    if (model.RoomImageFile != null && model.RoomImageFile.Length > 0 )
                     {
                         using var ms = new MemoryStream();
                         model.RoomImageFile.CopyTo(ms);
@@ -148,7 +157,7 @@ namespace Hotel.Controllers
                     bool result = _roomService.EditRoom(model);
                     if (result)
                     {
-                        return RedirectToAction(nameof(Index));
+                        return RedirectToAction(nameof(Index1));
                     }
 
                     ModelState.AddModelError(string.Empty, "Could not save changes. Try again.");
@@ -199,6 +208,8 @@ namespace Hotel.Controllers
                 return View();
             }
         }
+
+        
 
     }
 }

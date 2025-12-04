@@ -14,6 +14,7 @@ builder.Services.AddScoped<RoleServices>();
 builder.Services.AddScoped<RoomServices>();
 builder.Services.AddScoped<FloorServices>();
 builder.Services.AddScoped<ReservationService>();
+builder.Services.AddScoped<AdminService>();
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>

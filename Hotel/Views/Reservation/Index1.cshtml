@@ -1,0 +1,146 @@
+﻿@model IEnumerable<Hotel.Models.ViewModels.ReservationViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1 class="text-dark" style="font-family:Gabriola; font-size:90px">Reservations</h1>
+
+
+
+@if (Model == null || !Model.Any())
+{
+    <p>No reservations found.</p>
+}
+else
+{
+    <div class="page-header">
+					<div class="row align-items-center">
+						<div class="col">
+							<div class="mt-5">
+								<h4 class="card-title float-left mt-2">Reservations</h4>
+                                <a asp-action="Add1" asp-controller="Reservation" class="btn btn-primary float-right veiwbutton ">Add Booking</a>
+                            </div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="card card-table">
+							<div class="card-body booking_card">
+								<div class="table-responsive">
+									<table class="datatable table table-stripped table table-hover table-center mb-0">
+										<thead>
+											<tr>
+												<th>
+													@Html.DisplayNameFor(model => model.ReservationDate)
+												</th>
+												<th>
+													@Html.DisplayNameFor(model => model.ArrivalDate)
+												</th>
+												<th>
+													@Html.DisplayNameFor(model => model.DateOfExit)
+												</th>
+												<th>
+													@Html.DisplayNameFor(model => model.ModeOfOrder)
+												</th>
+												<th>
+													@Html.DisplayNameFor(model => model.WithCar)
+												</th>
+												<th>
+													@Html.DisplayNameFor(model => model.CarRegNo)
+												</th>
+												<th>
+													@Html.DisplayNameFor(model => model.Room.RoomNo)
+												</th>
+												<th>
+													@Html.DisplayNameFor(model => model.Room.RoomImage)
+												</th>
+												<th>
+													Name
+												</th>
+												<th>
+													Actions
+												</th>
+											</tr>
+										</thead>
+										<tbody>
+											@foreach (var item in Model)
+											{
+												<tr>
+													<td>
+														@Html.DisplayFor(modelItem => item.ReservationDate)
+													</td>
+													<td>
+														@Html.DisplayFor(modelItem => item.ArrivalDate)
+													</td>
+													<td>
+														@Html.DisplayFor(modelItem => item.DateOfExit)
+													</td>
+													<td>
+														@Html.DisplayFor(modelItem => item.ModeOfOrder)
+													</td>
+													<td>
+														@Html.DisplayFor(modelItem => item.WithCar)
+													</td>
+													<td>
+														@if (item.CarRegNo != null)
+														{
+															@Html.DisplayFor(modelItem => item.CarRegNo)
+														}
+														else
+														{
+															<b>-</b>
+														}
+
+													</td>
+													<td>
+														@Html.DisplayFor(modelItem => item.Room.RoomNo)
+													</td>
+													<td>
+														@if (item.Room != null && item.Room.RoomImage != null)
+														{
+															<img src="data:image/jpg;base64,@Convert.ToBase64String(item.Room.RoomImage)" alt="Product Image" style="width: 150px; height: 150px;" />
+														}
+														else
+														{
+															<img src="~/images/no-image.png" alt="No Image" style="width:150px; height:150px;" />
+
+														}
+													</td>
+													<td>
+														@Html.DisplayFor(modelItem => item.User.FirstName) @Html.DisplayFor(modelItem => item.User.LastName) @Html.DisplayFor(modelItem => item.User.OtherNames)
+													</td>
+													<td class="text-center">
+														
+																<a asp-action="Edit"
+																   asp-route-id="@item.ReservationId"
+																   onclick="save(@item.RoomId, @item.ReservationId)"><button class="btn btn-block btn-outline-primary"><i class="fas fa-pencil-alt m-r-5"></i>Edit</button></a>
+																<a  asp-action="Details" asp-route-id="@item.ReservationId"><button class="btn btn-block btn-outline-secondary"><i class="fas fa-align-justify m-r-5"></i> Details</button></a>
+																<a asp-action="Delete" asp-route-id="@item.ReservationId"><button class="btn btn-block btn-outline-danger"><i class="fas fa-trash-alt m-r-5"></i> Delete</button></a>
+															
+													</td>
+												</tr>
+											}											
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			
+<table class="table m-5">
+    
+    <tbody>
+       
+    </tbody>
+</table>
+}
+<script>
+    function save(roomid,reservationid){
+        localStorage.setItem('roomid', roomid);
+        localStorage.setItem('rid', reservationid);
+    }
+</script>

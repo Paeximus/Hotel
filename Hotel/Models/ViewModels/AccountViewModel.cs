@@ -23,7 +23,10 @@ namespace Hotel.Models.ViewModels
 
         public string Password { get; set; } = null!;
 
-        public required string RoleId { get; set; } 
+        public required string RoleId { get; set; }
+
+        public virtual Role Role { get; set; } = null!;
+
 
     }
 }

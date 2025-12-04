@@ -94,8 +94,28 @@ namespace Hotel.Services
             return model;
         }
 
+        public bool IsRoomAvailable(int roomId, DateOnly checkIn, DateOnly checkOut, int? excludeReservationId = null)
+        {
+            // Check if there's any overlapping reservation
+            var overlappingReservation = _context.Reservations
+                .Where(r => r.RoomId == roomId
+                            && r.ReservationId != excludeReservationId // Exclude current reservation when editing
+                            && (
+                                // New reservation starts during an existing reservation
+                                (checkIn >= r.ArrivalDate && checkIn < r.ArrivalDate) ||
+                                // New reservation ends during an existing reservation
+                                (checkOut > r.DateOfExit && checkOut <= r.DateOfExit) ||
+                                // New reservation completely encompasses an existing reservation
+                                (checkIn <= r.ArrivalDate && checkOut >= r.DateOfExit)
+                            ))
+                .FirstOrDefault();
+
+            return overlappingReservation == null;
+
+        }
         public bool AddReservation(ReservationViewModel model, string userId, string roomId)
         {
+
             if (userId != null)
                 Console.WriteLine("UserId exists");
             else
@@ -103,6 +123,12 @@ namespace Hotel.Services
             _logger.LogWarning("UserId is null");
             try
             {
+                if (!IsRoomAvailable(model.RoomId, model.ArrivalDate, model.DateOfExit))
+                {
+                    _logger.LogWarning("Room {RoomId} is not available for {CheckIn} to {CheckOut}",
+                        model.RoomId, model.ArrivalDate, model.DateOfExit);
+                    return false;
+                }
                 Reservation reservation = new Reservation
                 {
                     ReservationId = model.ReservationId,
@@ -112,6 +138,7 @@ namespace Hotel.Services
                     ModeOfOrder = model.ModeOfOrder,
                     WithCar = model.WithCar,
                     CarRegNo = model.CarRegNo,
+                    Room= model.Room
                    
                     //RoomId = model.RoomId
                 };
@@ -202,14 +229,24 @@ namespace Hotel.Services
         {
             try
             {
-                Reservation? reservation = _context.Reservations.Where(r => r.ReservationId == reservationId).FirstOrDefault();
-                if (reservation == null) return false;
+                var reservation = _context.Reservations
+                    .FirstOrDefault(r => r.ReservationId == reservationId);
+
+                if (reservation == null)
+                {
+                    _logger.LogWarning("Attempted to delete non-existent reservation {ReservationId}", reservationId);
+                    return false;
+                }
+
                 _context.Reservations.Remove(reservation);
                 _context.SaveChanges();
+
+                _logger.LogInformation("Successfully deleted reservation {ReservationId}", reservationId);
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error deleting reservation {ReservationId}", reservationId);
                 return false;
             }
         }

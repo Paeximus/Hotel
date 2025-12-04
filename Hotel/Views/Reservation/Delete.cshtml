@@ -1,6 +1,7 @@
 ﻿@model Hotel.Models.ViewModels.ReservationViewModel
 @{
     ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_AdminDashLayout.cshtml";
 }
 
 @if (Model == null)
@@ -13,106 +14,101 @@
 }
 else
 {
-    <h1>Delete</h1>
-    <h3>Are you sure you want to delete this?</h3>
-    <div>
-        <h4>Reservation</h4>
-        <hr />
-        <dl class="row">
-            <dt class="col-sm-2">
-                Name
-            </dt>
-            <dd class="col-sm-10">
-                @if (Model.User != null)
-                {
-                    @Html.DisplayFor(model => model.User.FirstName) @Html.DisplayFor(model => model.User.LastName) @Html.DisplayFor(model => model.User.OtherNames)
-                }
-                else
-                {
-                    <text>N/A</text>
-                }
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.ReservationDate)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.ReservationDate)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.ArrivalDate)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.ArrivalDate)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.DateOfExit)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.DateOfExit)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.ModeOfOrder)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.ModeOfOrder)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.WithCar)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.WithCar)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.CarRegNo)
-            </dt>
-            <dd class="col-sm-10">
-                @if (!string.IsNullOrEmpty(Model.CarRegNo))
-                {
-                    @Html.DisplayFor(model => model.CarRegNo)
-                }
-                else
-                {
-                    <text>-</text>
-                }
-            </dd>
-            <dt class="col-sm-2">
-                Room Image
-            </dt>
-            <dd class="col-sm-10">
-                @if (Model.Room != null && Model.Room.RoomImage != null)
-                {
-                    <img src="data:image/jpg;base64,@Convert.ToBase64String(Model.Room.RoomImage)" alt="Room Image" style="width: 150px; height: 150px;" />
-                }
-                else
-                {
-                    <img src="~/images/no-image.png" alt="No Image" style="width:150px; height:150px;" />
-                }
-            </dd>
-            <dt class="col-sm-2">
-                Room Number
-            </dt>
-            <dd class="col-sm-10">
-                @if (Model.Room != null)
-                {
-                    @Html.DisplayFor(model => model.Room.RoomNo)
-                }
-                else
-                {
-                    <text>N/A</text>
-                }
-            </dd>
-        </dl>
-        <form asp-action="Delete" onsubmit="retrieve()">
-            <input type="hidden" asp-for="ReservationId" value="@Model.ReservationId" id="reserve" />
-            <input type="submit" value="Delete" class="btn btn-danger" /> |
-            <a asp-action="Index">Back to List</a>
-        </form>
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                   var rId = localStorage.getItem('rid');
-                   if (rId) {
-                       document.getElementById("reserve").value = rId;
-                   }
-        </script>
+    <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h3 class="page-title mt-5">Delete Reservation</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <strong>Are you sure you want to delete this reservation?</strong>
+                            <p class="mb-0">This action cannot be undone.</p>
+                        </div>
+
+                        <h4>Reservation Details</h4>
+                        <hr />
+                        <dl class="row">
+                            <dt class="col-sm-3">Guest Name</dt>
+                            <dd class="col-sm-9">
+                                @if (Model.User != null)
+                                {
+                                    @Model.User.FirstName @Model.User.LastName @Model.User.OtherNames
+                                }
+                                else
+                                {
+                                    <text>N/A</text>
+                                }
+                            </dd>
+
+                            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.ReservationDate)</dt>
+                            <dd class="col-sm-9">@Model.ReservationDate.ToString("MMM dd, yyyy")</dd>
+
+                            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.ArrivalDate)</dt>
+                            <dd class="col-sm-9">@Model.ArrivalDate.ToString("MMM dd, yyyy")</dd>
+
+                            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.DateOfExit)</dt>
+                            <dd class="col-sm-9">@Model.DateOfExit.ToString("MMM dd, yyyy")</dd>
+
+                            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.ModeOfOrder)</dt>
+                            <dd class="col-sm-9">@Html.DisplayFor(model => model.ModeOfOrder)</dd>
+
+                            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.WithCar)</dt>
+                            <dd class="col-sm-9">@Html.DisplayFor(model => model.WithCar)</dd>
+
+                            @if (!string.IsNullOrEmpty(Model.CarRegNo))
+                            {
+                                <dt class="col-sm-3">@Html.DisplayNameFor(model => model.CarRegNo)</dt>
+                                <dd class="col-sm-9">@Model.CarRegNo</dd>
+                            }
+
+                            <dt class="col-sm-3">Room Number</dt>
+                            <dd class="col-sm-9">
+                                @if (Model.Room != null)
+                                {
+                                    <text>Room @Model.Room.RoomNo</text>
+                                }
+                                else
+                                {
+                                    <text>N/A</text>
+                                }
+                            </dd>
+
+                            @if (Model.Room != null && Model.Room.RoomImage != null && Model.Room.RoomImage.Length > 0)
+                            {
+                                <dt class="col-sm-3">Room Image</dt>
+                                <dd class="col-sm-9">
+                                    <img src="data:image/png;base64,@Convert.ToBase64String(Model.Room.RoomImage)"
+                                         alt="Room Image"
+                                         style="max-width: 200px; height: auto; border-radius: 5px;" />
+                                </dd>
+                            }
+                        </dl>
+
+                        <form asp-action="Delete" asp-route-id="@Model.ReservationId" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" asp-for="ReservationId" />
+
+                            <div class="form-group mt-4">
+                                <button type="submit" class="btn btn-danger"
+                                        onclick="return confirm('Are you sure you want to delete this reservation? This action cannot be undone.');">
+                                    <i class="fas fa-trash"></i> Delete Reservation
+                                </button>
+                                <a asp-action="Index" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left"></i> Back to List
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 }

@@ -16,7 +16,7 @@
 }
 else
 {
-<table class="table m-5">
+<table class="table m-3">
     <thead>
         <tr>
             <th>
@@ -86,7 +86,7 @@ else
                     <td>
                         @if (item.Room!=null && item.Room.RoomImage!= null)
                         {
-                                <img src="data:image/jpg;base64,@Convert.ToBase64String(item.Room.RoomImage)" alt="Product Image" style="width: 150px; height: 150px;" />
+                                <img src="data:image/jpg;base64,@Convert.ToBase64String(item.Room.RoomImage)" alt="Product Image" style="width: 300px; height: 100px;" />
                         }
                         else
                         {
@@ -98,11 +98,10 @@ else
                         @Html.DisplayFor(modelItem => item.User.FirstName) @Html.DisplayFor(modelItem => item.User.LastName) @Html.DisplayFor(modelItem => item.User.OtherNames)
                     </td>
                     <td>
-                        <a asp-action="Edit"
-                           asp-route-id="@item.ReservationId"
-                           onclick="save(@item.RoomId, @item.ReservationId)">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.ReservationId">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.ReservationId">Delete</a>
+                        <a asp-action="Edit" asp-route-id="@item.ReservationId" onclick="save(@item.RoomId, @item.ReservationId)"><button class="btn btn-block btn-outline-primary"><i class="fas fa-pencil-alt m-r-5"></i>Edit</button></a>
+						<a  asp-action="Details" asp-route-id="@item.ReservationId"><button class="btn btn-block btn-outline-secondary"><i class="fas fa-align-justify m-r-5"></i> Details</button></a>
+						<a asp-action="Delete" asp-route-id="@item.ReservationId"><button class="btn btn-block btn-outline-danger"><i class="fas fa-trash-alt m-r-5"></i> Delete</button></a>
+															
                     </td>
                     
                 </tr>
